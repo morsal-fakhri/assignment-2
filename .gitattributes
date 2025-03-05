@@ -1,2 +1,419 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+import matplotlib.pyplot as plt
+import seaborn as sns
+df_2023 = df[df['time'] == 2023]
+plt.figure(figsize=(10, 6))
+sns.histplot(df_2023['Life expectancy '], bins=20, kde=True, color='royalblue')
+plt.xlabel('Life Expectancy (Years)')
+plt.ylabel('Number of Countries')
+plt.title('Distribution of Life Expectancy Across Countries (2023)')
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.savefig("sine_wave.png", dpi=300)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+df_2023 = df[df['time'] == 2023]
+plt.figure(figsize=(12, 6))
+sns.boxplot(x='continent', y='Life expectancy ', data=df_2023, palette='Set2')
+plt.xticks(rotation=45)
+plt.xlabel('continent')
+plt.ylabel('Life Expectancy (Years)')
+plt.title('Comparison of Life Expectancy Across Regions (2023)')
+plt.savefig("1.png", dpi=300)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+df_2023 = df[df['time'] == 2023]
+plt.figure(figsize=(12, 6))
+sns.violinplot(x='continent', y='GDP per capita growth (%)', data=df_2023, palette='Set3', inner="box")
+plt.xticks(rotation=45)
+plt.xlabel('Region')
+plt.ylabel('GDP per Capita (USD)')
+plt.title('Distribution of GDP per Capita Across Regions (2023)')
+plt.savefig("2.png", dpi=300)
+plt.show()
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+most_recent_year = 2024
+df_2024 = df[df['time'] == most_recent_year]
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='GDP per capita growth (%)', y='Life expectancy ', data=df_2024, hue='continent', palette='Set1', alpha=0.7)
+sns.regplot(x='GDP per capita growth (%)', y='Life expectancy ', data=df_2024, scatter=False, color='black', ci=None)
+plt.xscale('log')
+plt.xlabel('GDP per Capita Growth (%) (Log Scale)')
+plt.ylabel('Life Expectancy (Years)')
+plt.title(f'Correlation Between GDP per Capita Growth and Life Expectancy (2024)')
+plt.savefig("3.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+most_recent_year = 2024  
+df_recent = df[df['time'] == most_recent_year]
+plt.figure(figsize=(10, 6))
+sns.kdeplot(
+    x=df_recent['GDP per capita growth (%)'], 
+    y=df_recent['Life expectancy '], 
+    cmap="Blues", fill=True, levels=50
+)
+
+plt.xlabel('GDP per Capita Growth (%)')
+plt.ylabel('Life Expectancy (Years)')
+plt.title(f'2D Density Plot: GDP per Capita Growth vs. Life Expectancy ({most_recent_year})')
+plt.savefig("4.png", dpi=300)  
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+selected_countries = ['United States', 'China', 'India', 'Germany', 'Brazil']
+df_countries = df[(df['name'].isin(selected_countries)) & (df['time'] <= 2024)]
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=df_countries, x='time', y='Life expectancy ', hue='name', marker='o')
+plt.xlabel('Year')
+plt.ylabel('Life Expectancy (Years)')
+plt.title('Life Expectancy Trends Over Time for Selected Countries')
+plt.xticks(range(df_countries['time'].min(), 2025,20))
+plt.legend(title="Country")
+plt.savefig("5.png", dpi=300)  
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+selected_countries = ['United States', 'China', 'India', 'Germany', 'Brazil']
+df_countries = df[(df['name'].isin(selected_countries)) & (df['time'] <= 2024)]
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=df_countries, x='time', y='GDP per capita growth (%)', hue='name', marker='o')
+plt.xlabel('Year')
+plt.ylabel('GDP per Capita Growth (%)')
+plt.title('GDP per Capita Growth Over Time for Selected Countries (Until 2024)')
+plt.xticks(range(df_countries['time'].min(), 2025,20))
+plt.legend(title="Country")
+plt.savefig("6.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+df_recent_2024 = df[df['time'] <= 2024]
+most_recent_year = df_recent_2024['time'].max()
+df_recent = df_recent_2024[df_recent_2024['time'] == most_recent_year]
+top_10_countries = df_recent.sort_values(by='Population', ascending=False).head(10)
+plt.figure(figsize=(10, 6))
+sns.barplot(data=top_10_countries, x='Population', y='name', palette='viridis')
+plt.xlabel('Population')
+plt.ylabel('Country')
+plt.title(f'Top 10 Countries by Population in {most_recent_year}')
+plt.savefig("7.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+#rrrrrrrrrrrrr
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+numerical_columns = df.select_dtypes(include=['float64', 'int64']).columns
+correlation_matrix = df[numerical_columns].corr()
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', cbar=True, 
+            linewidths=0.5, linecolor='black', square=True)
+plt.title('Correlation Heatmap of Numerical Variables')
+plt.savefig("8.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+years_of_interest = [1990, 2005, 2023]
+df_selected_years = df[df['time'].isin(years_of_interest)]
+regions = df_selected_years['continent'].unique()
+plt.figure(figsize=(15, 10))
+for i, region in enumerate(regions, 1):
+  
+    df_region = df_selected_years[df_selected_years['continent'] == region]
+    sns.lineplot(data=df_region, x='GDP per capita growth (%)', y='Life expectancy ', hue='time', marker='o', markersize=8, palette='coolwarm')
+
+    plt.title(f'{region} (1990, 2005, 2023)')
+    plt.xlabel('GDP per Capita')
+    plt.ylabel('Life Expectancy')
+    plt.legend(title='Year')
+
+plt.tight_layout()
+plt.savefig("9.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+years_of_interest = [1990, 2005, 2023]
+df_selected_years = df[df['time'].isin(years_of_interest)]
+plt.figure(figsize=(8, 6))
+sns.violinplot(data=df_selected_years, x='time', y='Population', inner="quart", palette='coolwarm')
+plt.xlabel('Year')
+plt.ylabel('Population')
+plt.title('Distribution of Population Sizes Across Countries (1990, 2005, 2023)')t
+plt.savefig("10.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+years_of_interest = [1990, 2005, 2023]
+df_selected_years = df[df['time'].isin(years_of_interest)]
+plt.figure(figsize=(12, 8))
+sns.boxplot(data=df_selected_years, x='time', y='Population', palette='coolwarm')
+plt.xlabel('Year')
+plt.ylabel('Population')
+plt.title('Distribution of Population Sizes Across Countries (1990, 2005, 2023)')
+plt.savefig("11.png", dpi=300)  # Saves as PNG with 300 DPI
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+years_of_interest = [1990, 2023]
+df_selected_years = df[df['time'].isin(years_of_interest)]
+plt.figure(figsize=(14, 8))
+sns.boxplot(data=df_selected_years, x='time', y='GDP per capita growth (%)', hue='continent', palette='coolwarm')
+plt.xlabel('Year')
+plt.ylabel('GDP per Capita')
+plt.title('Economic Inequality (GDP per Capita) Within Regions: 1990 vs 2023')
+plt.savefig("12.png", dpi=300) 
+
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df_2023 = df[df['time'] == 2023]
+df_2023 = df_2023[['name', 'Life expectancy ', 'GDP per capita growth (%)', 'Population']]
+top_5 = df_2023.nlargest(5, 'Life expectancy ')
+bottom_5 = df_2023.nsmallest(5, 'Life expectancy ')
+selected_countries = pd.concat([top_5, bottom_5])
+palette = sns.color_palette("coolwarm", 10)
+fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+sns.barplot(data=selected_countries, x='name', y='Life expectancy ', ax=axes[0], palette=palette)
+axes[0].set_title("Life Expectancy (Top 5 vs Bottom 5)")
+axes[0].set_ylabel("Life Expectancy (Years)")
+axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=45)
+sns.barplot(data=selected_countries, x='name', y='GDP per capita growth (%)', ax=axes[1], palette=palette)
+axes[1].set_title("GDP per Capita Growth (%) (Top 5 vs Bottom 5)")
+axes[1].set_ylabel("GDP per Capita Growth (%)")
+axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=45)
+sns.barplot(data=selected_countries, x='name', y='Population', ax=axes[2], palette=palette)
+axes[2].set_yscale('log')  # Log scale for better visualization
+axes[2].set_title("Population (Log Scale)")
+axes[2].set_ylabel("Population")
+axes[2].set_xticklabels(axes[2].get_xticklabels(), rotation=45)
+plt.tight_layout()
+plt.savefig("13.png", dpi=300)  
+plt.show()
+
+
+#kkkk
+
+
+
+
+
+
+
+
+
+
+
